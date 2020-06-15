@@ -62,8 +62,7 @@ All things automation, with a smattering of Ops-related development and a health
 
 # Plan
 
-- 20 minutes of talking
-- 15 minutes of demos
+- 30ish minutes of presentation
 - Questions
 
 ---
@@ -92,7 +91,7 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Manual VMs
+# Manual Install On VMs
 
 ## 2017
 
@@ -101,7 +100,9 @@ All things automation, with a smattering of Ops-related development and a health
 - Problems
 - Pain
 
-<!-- Problems - draining nodes, hot patching, pets vs cattle -->
+<!-- Problems - draining nodes, hot patching, pets vs cattle 
+We were so unconfident that we could deploy that any developer who had code in the release was REQUIRED to be sitting in the area next to the ops guys during the release period.
+-->
 
 ---
 
@@ -112,7 +113,10 @@ All things automation, with a smattering of Ops-related development and a health
 - Jan 2018 - First Kubernetes in production
 - Early 2019 - shut down the last of the old VM infrastructure
 
-<!-- Long process to break all the hard coded paths and other assumptions -->
+<!-- Long process 
+* to learn and understand Kubernetes
+* to break all the hard coded paths and other assumptions
+ -->
 
 ---
 
@@ -166,16 +170,6 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Helm demo
-
-- helm create
-- helm template
-- helm deploy
-- helm rollback
-- helm history
-
----
-
 # Helm
 
 ## 2018/2019
@@ -201,49 +195,6 @@ Finished converting everything to deploy with Helm charts
 <!-- Mostly automated process also mean you can break production more completely and do it quickly. We once deployed to production with the beta configuration. It didn't go well. -->
 
 ---
-
-# Helmfile
-
-- Alpha
-- Not many stars
-- No website
-- But it works
-  - Really well
-
-- Closed the config as code loop
-
-![bg right:45%](helmfilepage.png)
-
-<!-- Dustin Van Buskirk suggested Helmfile -->
-<!-- I wrote a script to pull in our existing values files and had it working within days. The hardest part was training our QA staff that drive our release process. -->
-
----
-
-# Helmfile demo
-
-- Simple example
-- Vivint production example
-
-## Commands
-
-- diff
-- apply
-- template
-
----
-
-# Vivint Deployments - Helmfile - Late 2019
-
-## Great
-
-- Faster - 5 minutes
-- Deployments more reliable
-
----
-
-# Vivint Deployments - Helm - Late 2019
-
-(Jumping back to our Helm status)
 
 ## But
 
@@ -277,6 +228,15 @@ Finished converting everything to deploy with Helm charts
 
 ---
 
+# The winners
+
+- Argo Flux
+- CodeFresh
+
+![bg right](codefreshlogo.jpg)
+
+---
+
 # Codefresh pipeline
 
 - Access control
@@ -285,6 +245,60 @@ Finished converting everything to deploy with Helm charts
 - Flexible
 
 ![bg right contain](codefreshflow.png)
+
+---
+
+# Helmfile
+
+- Alpha
+- Not many stars
+- No website
+- But it works
+  - Really well
+
+- Closed the config as code loop
+
+![bg right:45%](helmfilepage.png)
+
+<!-- Dustin Van Buskirk suggested Helmfile -->
+<!-- I wrote a script to pull in our existing values files and had it working within days. The hardest part was training our QA staff that drive our release process. -->
+
+---
+
+# Late 2019
+
+Codefresh, Helm, and Helmfile have been working well.
+
+## Great
+
+- Fast deploys - 5 minutes
+- More reliable than ever before
+- Slack notifications
+
+![bg right:35%](deploymentSlackNotification.png)
+
+---
+
+# But
+
+- Still not fast enough
+- Not enough visibility if deployment succeded
+
+---
+
+# Mid 2020
+
+## Reliability
+
+Partial rollout of:
+
+- Liveness Probes
+- Readiness Probes
+- Helm Tests
+
+## Speed
+
+More intelligence around deployment to make them faster
 
 ---
 
@@ -325,9 +339,9 @@ Verifying our deployments involves various tools and processes; some automated a
 # Working on
 
 - Helm3
-- Liveness & readiness probes
-- Helm test
-- Breaking up helmfile monolith
+
+TODO - add more about how we compelete the loop w/ probes and helm test
+How blue matador alerts to slack
 
 ---
 
