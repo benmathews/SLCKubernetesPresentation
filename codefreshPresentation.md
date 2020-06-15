@@ -2,7 +2,7 @@
 marp: true
 inlineSVG: true
 header: 'Automatic Deployments Relieve Pain and Suffering'
-footer: 'Ben Mathews - Kubernetes Salt Lake - March 12, 2020'
+footer: 'Ben Mathews/Jared Meeker - June 2020'
 
 ---
 
@@ -50,6 +50,16 @@ I play with the latest CNCF toys.
 
 ---
 
+# Jared Meeker
+
+jared@meekers.org
+jared.meeker@vivint.com
+https://github.com/jlmeeker
+
+All things automation, with a smattering of Ops-related development and a healthy dose of tech-related fun!
+
+---
+
 # Plan
 
 - 20 minutes of talking
@@ -71,10 +81,10 @@ I play with the latest CNCF toys.
 
 # Who is Vivint (Technical)
 
-- 40 Node Kubernetes self hosted cluster
-- 140+ Deployments, Daemonsets, Statefulsets, Cronjobs
-- 2K+ pods
-- 17K (25K peak) messages / second from homes
+- 100+ Kubernetes nodes across 4 clusters (mix of on-prem and cloud)
+- 4700+ Deployments, Daemonsets, Statefulsets, Cronjobs
+- 8K+ pods
+- ~1.5 billion messages per day from homes (at peak nearly 25k messages/second)
 - 5K messages/second in mobile traffic
 - Multiple releases a week
 
@@ -275,6 +285,40 @@ Finished converting everything to deploy with Helm charts
 - Flexible
 
 ![bg right contain](codefreshflow.png)
+
+---
+
+# Post Deployment
+
+Verifying our deployments involves various tools and processes; some automated and some not.
+
+- Automated
+  - helm
+  - internal tooling (automated tests)
+- Manual
+  - kubectl rollout status
+  - kubectl get deployments
+  - internal tooling (manual tests)
+
+<!-- We still have too much manual verification.  We're working on it and making great progress. -->
+<!-- Deployments still require a manual, visual check that  -->
+
+---
+
+# When Things Go Bad (and they will)
+
+- Monitoring Tools
+  - bluematador
+  - prometheus/alertmanager
+  - grafana
+  - ELK Stack
+  - kubectl
+
+![bg vertical right contain](BlueMatador-Logo-Stacked.jpg)
+![bg contain](kubernetes_prom_diagram2.png)
+![bg contain](elk-stack-elkb-diagram.svg)
+
+<!-- In addition to the tools listed above we have a series of chat bots that monitor alerts and will retrieve and display additional, pertinent information surrounding our alerts. These are most frequently in the form of time-series charts that show various aspects of our platform in the few hours leading up to the alert. -->
 
 ---
 
