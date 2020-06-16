@@ -10,6 +10,7 @@ footer: 'Ben Mathews/Jared Meeker - June 2020'
 
 ## Vivint's Deployment Pains and how Kubernetes, Helm, Helmfile, and Codefresh made deployments easy(er)
 
+https://github.com/benmathews/SLCKubernetesPresentation
 https://bit.ly/3aNIiZq
 
 ---
@@ -43,8 +44,6 @@ https://bit.ly/3aNIiZq
 
 ben@mathews2000.com
 ben.mathews@vivint.com
-https://github.com/benmathews/SLCKubernetesPresentation
-https://bit.ly/3aNIiZq
 
 I play with the latest CNCF toys.
 
@@ -57,13 +56,6 @@ jared.meeker@vivint.com
 https://github.com/jlmeeker
 
 All things automation, with a smattering of Ops-related development and a healthy dose of tech-related fun!
-
----
-
-# Plan
-
-- 30ish minutes of presentation
-- Questions
 
 ---
 
@@ -100,8 +92,14 @@ All things automation, with a smattering of Ops-related development and a health
 - Problems
 - Pain
 
-<!-- Problems - draining nodes, hot patching, pets vs cattle 
-We were so unconfident that we could deploy that any developer who had code in the release was REQUIRED to be sitting in the area next to the ops guys during the release period.
+<!-- 
+* Software was installed on 40 VMs. 
+* We had a salt configuration for them but used it badly.
+* Deployment was a completely manual process. 
+* It consisted of draining nodes, manually moving traffic around in our F5, we often did hot patching
+* In the pets vs cattle analogy we had a lot of poorly behaved pets. 
+* Even when things went well we tolerated minor service disruptions to do a deploy.
+* We were so unconfident that we could deploy that any developer who had code in the release was REQUIRED to be sitting in the area next to the ops guys during the release period.
 -->
 
 ---
@@ -113,9 +111,12 @@ We were so unconfident that we could deploy that any developer who had code in t
 - Jan 2018 - First Kubernetes in production
 - Early 2019 - shut down the last of the old VM infrastructure
 
-<!-- Long process 
+<!-- 
+* We knew we had to get better. 
+* Kubernetes was quite new 
 * to learn and understand Kubernetes
 * to break all the hard coded paths and other assumptions
+* to harden our code
  -->
 
 ---
@@ -345,4 +346,7 @@ How blue matador alerts to slack
 
 ---
 
-![bg](questions.jpg)
+https://github.com/benmathews/SLCKubernetesPresentation
+https://bit.ly/3aNIiZq
+
+![bg right](questions.jpg)
