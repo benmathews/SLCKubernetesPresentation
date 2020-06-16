@@ -278,17 +278,6 @@ Finished converting everything to deploy with Helm charts
 
 ---
 
-# Codefresh pipeline
-
-- Access control
-- Audit logs
-- Repeatable, scriptable workflow
-- Flexible
-
-![bg right contain](codefreshflow.png)
-
----
-
 # Helmfile
 
 - Alpha
@@ -301,8 +290,22 @@ Finished converting everything to deploy with Helm charts
 
 ![bg right:45%](helmfilepage.png)
 
-<!-- Dustin Van Buskirk suggested Helmfile -->
-<!-- I wrote a script to pull in our existing values files and had it working within days. The hardest part was training our QA staff that drive our release process. -->
+<!-- Dustin Van Buskirk suggested Helmfile
+I wrote a script to pull in our existing values files and had it working within days. 
+The hardest part was training our QA staff that drive our release process.
+IMO If you are using Helm, you should be using Helmfile
+ -->
+
+---
+
+# Codefresh pipeline
+
+- Access control
+- Audit logs
+- Repeatable, scriptable workflow
+- Flexible
+
+![bg right contain](codefreshflow.png)
 
 ---
 
@@ -349,7 +352,7 @@ More intelligence around deployment to make them faster
 
 # Post Deployment
 
-Anyone that has worked with kubernetes and helm knows that jut running some commands doesn't always have the result you were expecting.  We have quite a few tools at our disposal for verifying our deployments and we'll be coving the major ones.  However, a few things to note:
+Anyone that has worked with kubernetes and helm knows that just running some commands doesn't always have the result you were expecting.  We have quite a few tools at our disposal for verifying our deployments and we'll be coving the major ones.  However, a few things to note:
 
 - bugs are inevitable
 - expect things to break
@@ -377,7 +380,7 @@ Anyone that has worked with kubernetes and helm knows that jut running some comm
 # Post Deployment: Automated
 
 - helm
-  - part of our deployment pipeline runs a helm verify to make sure the post-deploy kubernetes state is what we wanted
+  - part of our deployment pipeline runs a `helm test` to make sure the post-deploy kubernetes state is what we wanted
 - internal tooling (automated tests)
 - monitoring and alerting
 
@@ -459,14 +462,6 @@ Use when necessary or as a last resort... these logs can be very verbose!
 - `dmesg`
 
 <!-- Here'll you'll want to look for things like errors/warnings around resource constraints (cannot fork a process) or ther major errors.  Another thing to keep an eye on are dmesg logs about netfilter, or "neighbor".  Kube uses iptables VERY heavily and sometimes kube nodes will need tweaks to systemctl values to increase its ability to track connections within the cluster.  Neighbor errors could mean that you need to increase your arp cache size. -->
-
----
-
-# Working on
-
-- Helm3
-
-TODO - add more about how we compelete the loop w/ probes and helm test
 
 ---
 
