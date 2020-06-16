@@ -349,35 +349,116 @@ More intelligence around deployment to make them faster
 
 # Post Deployment
 
-Verifying our deployments involves various tools and processes; some automated and some not.
+Anyone that has worked with kubernetes and helm knows that jut running some commands doesn't always have the result you were expecting.  We have quite a few tools at our disposal for verifying our deployments and we'll be coving the major ones.  However, a few things to note:
 
-- Automated
-  - helm
-  - internal tooling (automated tests)
-- Manual
-  - kubectl rollout status
-  - kubectl get deployments
-  - internal tooling (manual tests)
+- bugs are inevitable
+- expect things to break
+- know your environment and the tools available
+- computers suck (but we love them anyway)
+
+---
+
+# Most Common Problems
+
+- Misconfigured helm chart deployed (broken pod/service)
+- Deployment under-scaled (not enough replicas for the load)
+- Broken helm chart (wrong values for our production environment)
+- Software bugs (things we can only see at scale)
+- Incomplete helm chart (need developer education and/or better tooling)
+
+<!-- Helm is most of our problems... not the software itself, but our ability to get our charts in order.  This is really hard since we expect each developer to manage their own charts and (for most of them) this is their first time seeing Helm. -->
+
+<!-- Also... helm chart problems are the vast majority if our problems.  We rarely have an issue with Kubernetes, Helm itself, or our deployment pipelines!  This is real evidence if the progress we've made over the past several years. -->
+
+<!-- Finally, these problems with helm charts are totally fixable and preventable.  It won't be long and we'll have these types of issues nearly non-existent. -->
+
+---
+
+# Post Deployment: Automated
+
+- helm
+  - part of our deployment pipeline runs a helm verify to make sure the post-deploy kubernetes state is what we wanted
+- internal tooling (automated tests)
+- monitoring and alerting
 
 <!-- We still have too much manual verification.  We're working on it and making great progress. -->
-<!-- Deployments still require a manual, visual check that  -->
+
+---
+
+# Post Deployment: Manual
+
+- `kubectl rollout status`
+![](kube-deployment-rollout.png)
+- `kubectl get deployments`
+![](kube-deployments.png)
+- internal tooling (manual tests)
+
+
+<!--Deployments still require a manual, visual check that  -->
 
 ---
 
 # When Things Go Bad (and they will)
 
-- Monitoring Tools
-  - bluematador
-  - prometheus/alertmanager
-  - grafana
-  - ELK Stack
-  - kubectl
+- Alerting
+  - Blue Matador
+  - Prometheus/Alertmanager
+  - Slack
+    - receives alerts
+    - bots and more bots!
 
-![bg vertical right contain](BlueMatador-Logo-Stacked.jpg)
-![bg contain](kubernetes_prom_diagram2.png)
-![bg contain](elk-stack-elkb-diagram.svg)
+![bg vertical right height:350px](BlueMatador-Logo-Stacked.jpg)
+![bg height:200px](prometheus.jpeg)
+![bg height:200px](Slack_RGB.png)
 
-<!-- In addition to the tools listed above we have a series of chat bots that monitor alerts and will retrieve and display additional, pertinent information surrounding our alerts. These are most frequently in the form of time-series charts that show various aspects of our platform in the few hours leading up to the alert. -->
+
+<!-- We have a series of chat bots that monitor alerts and will retrieve and display additional, pertinent information surrounding our alerts. These are most frequently in the form of time-series charts that show various aspects of our platform in the few hours leading up to the alert. -->
+
+---
+
+# Logs and Performance Stats
+- Grafana
+- ELK Stack (host and pod logs)
+- kubectl
+
+![bg vertical right contain](grafana.png)
+![bg right contain](elk-stack-elkb-diagram.svg)
+
+<!-- When alerts aren't enough, we turn to looking at logs and various metrics we graph in Grafana. -->
+
+---
+
+# Utilities: kubectl
+
+The Swiss Army Knife of all kube tools.
+- `kubectl describe deployment <name>` # note the events part of the output
+- `kubectl describe service <name>` # verify port(s) AND endpoints
+- `kubectl get pods` # look for restarts, status != Running
+- `kubectl top pod -n <namespace>` # compare cpu/memory w/ limits set in the deployment
+- `kubectl logs -n <namespace> <pod name>`
+
+<!-- Kubernetes is really good taking assignments.  However, running a cluster of any size requires an intimate understanding of this command.  Just like using the root user on a *nix box... this command can be your best friend or you worst enemy. -->
+
+---
+
+# Utilities: stern
+
+Real-time tailing of kubernetes pods... yes, multiple!
+- `stern -n <namespace> <part_of_pod_name>`
+- `stern -n ingress ingress` # HTTP ingress and which svc/pod it routed to
+
+<!-- Stern allows us to see logs across all pods of a deployment, or just a single one... in real time. Read the documentation online because it has a ton of features that you'll find interesting. -->
+
+---
+
+# Utilities: journalctl
+
+Use when necessary or as a last resort... these logs can be very verbose!
+- `journalctl -u kubelet.service` # on kube node
+- `journalctl -u docker.service` # on kube node
+- `dmesg`
+
+<!-- Here'll you'll want to look for things like errors/warnings around resource constraints (cannot fork a process) or ther major errors.  Another thing to keep an eye on are dmesg logs about netfilter, or "neighbor".  Kube uses iptables VERY heavily and sometimes kube nodes will need tweaks to systemctl values to increase its ability to track connections within the cluster.  Neighbor errors could mean that you need to increase your arp cache size. -->
 
 ---
 
@@ -386,11 +467,19 @@ Verifying our deployments involves various tools and processes; some automated a
 - Helm3
 
 TODO - add more about how we compelete the loop w/ probes and helm test
-How blue matador alerts to slack
 
 ---
 
 https://github.com/benmathews/SLCKubernetesPresentation
+
 https://bit.ly/3aNIiZq
+
+https://github.com/wercker/stern
+
+https://www.bluematador.com/
+
+http://codefresh.io/
+
+https://www.vivint.com
 
 ![bg right](questions.jpg)
