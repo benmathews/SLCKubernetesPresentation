@@ -3,7 +3,7 @@ marp: true
 inlineSVG: true
 header: 'Automatic Deployments Relieve Pain and Suffering'
 footer: 'Ben Mathews/Jared Meeker - June 2020'
-
+backgroundColor: #edeff7
 ---
 
 # Automatic Deployments Relieve Pain and Suffering
@@ -104,7 +104,7 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Manual Kubernetes
+# Manual Install on Kubernetes
 
 ## Jan 2018
 
@@ -113,15 +113,20 @@ All things automation, with a smattering of Ops-related development and a health
 
 <!-- 
 * We knew we had to get better. 
-* Kubernetes was quite new 
-* to learn and understand Kubernetes
+* Kubernetes first release was 2015 and it was still raw
+* Jared figured out how to install and maintain a Kubernetes cluster
+* I figured out how to use use Kubernetes
+* Because it was so new we had lots of what I'll call adventures
+  * bleeding edge kernel requirments
+  * broken network drivers
+  * obscure configuration issues
 * to break all the hard coded paths and other assumptions
 * to harden our code
  -->
 
 ---
 
-# Manual Kubernetes
+# Manual Install on Kubernetes
 
 ## Great
 
@@ -134,11 +139,11 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Manual Kubernetes
+# Manual Install on Kubernetes
 
 ## But
 
-- But still manual
+- But deployment was still manual (YAML editing)
 - Numerous mistakes
   - Wrong image tag
   - Forgetting to add new ENV parameters
@@ -146,7 +151,9 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Manual Kubernetes is a maintenance nightmare
+# Manual Install on Kubernetes
+
+## Multiple environments
 
 - Hand editing YAML configs
 - Syncronizing similar deployments across beta and production
@@ -155,11 +162,27 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Helm
+# Something better
 
 - Config as code
-- Updates/Rollbacks
 - Templating
+
+![bg brightness:2.5](sunrise.jpg)
+
+<!-- 
+* At the time there was at least three options that appeared to meet our needs
+* Fortunately we picked the winner
+ -->
+
+---
+
+# Helm
+
+- Golang template
+- Need to understand Kubernetes and a bit of programming
+- Well supported by the community
+- Solved all of our problems
+  - Though it created some more
 
 ![bg right:45%](helmhomepage.png)
 
@@ -169,9 +192,14 @@ All things automation, with a smattering of Ops-related development and a health
 
 ![bg right:45%](hubhelmpage.png)
 
+<!-- 
+* Because of the wide adoption, there are corporate and community built charts for just about every public piece of software.
+* They aren't always perfect, but at the least, serve as a great starting point.
+ -->
+
 ---
 
-# Helm
+# Helm Install
 
 ## 2018/2019
 
@@ -182,28 +210,40 @@ All things automation, with a smattering of Ops-related development and a health
 
 ---
 
-# Late 2019
+# Helm Install
+
+## Late 2019
 
 Finished converting everything to deploy with Helm charts
 
 ## But
 
-- Still manual deployments
+- Still manual steps in deployments
 - Still mistakes
 
-![bg right auto](oldhelmdeployinstructions.png)
+![bg right:55%](oldhelmdeployinstructions.png) 
 
-<!-- Mostly automated process also mean you can break production more completely and do it quickly. We once deployed to production with the beta configuration. It didn't go well. -->
+<!-- 
+* A mostly automated process mean you can break production quickly and completely.
+* We once deployed to production with the beta configuration. It didn't go well.
+-->
 
 ---
+
+# Helm Install
 
 ## But
 
 - Manual workflow
   - Editing wiki pages
   - Slack messages
-  - Miscomunication and mistakes == deployment mistakes and outages
+  - Miscomunication and mistakes
+  - outages
 - Still too slow
+
+![bg right:55%](oldhelmdeployinstructions.png) 
+
+<!-- The too slow complaint will probably continue until our deployment times are measured in milliseconds. -->
 
 ---
 
@@ -266,7 +306,9 @@ Finished converting everything to deploy with Helm charts
 
 ---
 
-# Late 2019
+# Fully Automatic Install
+
+## Late 2019
 
 Codefresh, Helm, and Helmfile have been working well.
 
@@ -280,7 +322,9 @@ Codefresh, Helm, and Helmfile have been working well.
 
 ---
 
-# But
+# Fully Automatic Install
+
+## But
 
 - Still not fast enough
 - Not enough visibility if deployment succeded
