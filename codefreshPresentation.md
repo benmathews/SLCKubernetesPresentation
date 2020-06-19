@@ -2,7 +2,7 @@
 marp: true
 inlineSVG: true
 header: 'Automatic Deployments Relieve Pain and Suffering'
-footer: 'Ben Mathews/Jared Meeker - June 2020'
+footer: 'Ben Mathews / Jared Meeker - July 2020'
 backgroundColor: #edeff7
 ---
 
@@ -53,7 +53,6 @@ I play with the latest CNCF toys.
 
 jared@meekers.org
 jared.meeker@vivint.com
-https://github.com/jlmeeker
 
 All things automation, with a smattering of Ops-related development and a healthy dose of tech-related fun!
 
@@ -73,7 +72,7 @@ All things automation, with a smattering of Ops-related development and a health
 # Who is Vivint (Technical)
 
 - 100+ Kubernetes nodes across 4 clusters (mix of on-prem and cloud)
-- 4700+ Deployments, Daemonsets, Statefulsets, Cronjobs
+- 4700+ deployments, daemonsets, statefulsets, cronjobs
 - 8K+ pods
 - ~1.5 billion messages per day from homes (at peak nearly 25k messages/second)
 - 5K messages/second in mobile traffic
@@ -238,7 +237,7 @@ Finished converting everything to deploy with Helm charts
   - Editing wiki pages
   - Slack messages
   - Miscomunication and mistakes
-  - outages
+  - Outages
 - Still too slow
 
 ![bg right:55%](oldhelmdeployinstructions.png) 
@@ -285,7 +284,6 @@ Finished converting everything to deploy with Helm charts
 - No website
 - But it works
   - Really well
-
 - Closed the config as code loop
 
 ![bg right:45%](helmfilepage.png)
@@ -339,7 +337,6 @@ Codefresh, Helm, and Helmfile have been working well.
 ## Reliability
 
 Partial rollout of:
-
 - Liveness Probes
 - Readiness Probes
 - Helm Tests
@@ -352,37 +349,40 @@ More intelligence around deployment to make them faster
 
 # Post Deployment
 
-Anyone that has worked with kubernetes and helm knows that just running some commands doesn't always have the result you were expecting.  We have quite a few tools at our disposal for verifying our deployments and we'll be coving the major ones.  However, a few things to note:
+Anyone that has worked with Kubernetes and Helm knows that just running some commands doesn't always have the result you were expecting.  We have quite a few tools at our disposal for verifying our deployments and we'll be coving the major ones.  However, a few things to note:
 
-- bugs are inevitable
-- expect things to break
-- know your environment and the tools available
-- computers suck (but we love them anyway)
+- Bugs are inevitable
+- Expect things to break
+- Know your environment and the tools available
+- No matter how much care and attention we give them, computers will do their best to make us miserable
 
 ---
 
 # Most Common Problems
 
-- Misconfigured helm chart deployed (broken pod/service)
-- Deployment under-scaled (not enough replicas for the load)
-- Broken helm chart (wrong values for our production environment)
-- Software bugs (things we can only see at scale)
-- Incomplete helm chart (need developer education and/or better tooling)
+- Helm chart broken / incomplete
+  - missing pieces (service or ingress definitions)
+  - not scaled properly (when deploying to production)
+  - wrong values (ENV variables, image etc.) for prod / dev / test
+- Software bugs:
+  - things we can only see at scale
+  - bugs not caught in pre-deployment testing
+- Broken / bad kubernetes nodes (yup, not truely "serverless")
 
 <!-- Helm is most of our problems... not the software itself, but our ability to get our charts in order.  This is really hard since we expect each developer to manage their own charts and (for most of them) this is their first time seeing Helm. -->
 
-<!-- Also... helm chart problems are the vast majority if our problems.  We rarely have an issue with Kubernetes, Helm itself, or our deployment pipelines!  This is real evidence if the progress we've made over the past several years. -->
+<!-- The fact that most of our deployment problems are related to Helm is real evidence if the progress we've made over the past several years. -->
 
-<!-- Finally, these problems with helm charts are totally fixable and preventable.  It won't be long and we'll have these types of issues nearly non-existent. -->
+<!-- Finally, these problems with Helm charts are totally fixable and preventable.  It won't be long and we'll have these types of issues nearly non-existent. -->
 
 ---
 
 # Post Deployment: Automated
 
-- helm
+- Helm
   - part of our deployment pipeline runs a `helm test` to make sure the post-deploy kubernetes state is what we wanted
-- internal tooling (automated tests)
-- monitoring and alerting
+- Internal tooling (automated tests)
+- Monitoring and alerting
 
 <!-- We still have too much manual verification.  We're working on it and making great progress. -->
 
@@ -403,37 +403,74 @@ Anyone that has worked with kubernetes and helm knows that just running some com
 
 # When Things Go Bad (and they will)
 
-- Alerting
-  - Blue Matador
-  - Prometheus/Alertmanager
-  - Slack
-    - receives alerts
-    - bots and more bots!
+The Kubernetes ecosystem is a complex and intertwined mix of a LOT of different software. Deploying our own software into this environment doesn't always go as smooth as we'd like.  We need tools that can detect problems and help us find the cause as quickly as possible.
 
-![bg vertical right height:350px](BlueMatador-Logo-Stacked.jpg)
-![bg height:200px](prometheus.jpeg)
-![bg height:200px](Slack_RGB.png)
+---
 
+# Blue Matador
+
+Reliable monitoring with an excellent set of pre-built rules (here are a few):
+- crashing pods
+- deployments with too few pods
+- pods getting OOM-killed
+- nodes offline
+
+![bg right height:100%](BlueMatador-Logo-Stacked.jpg)
+
+<!-- Blue Matador has been an extremely reliable and (thankfully) hands-off monitoring solution thanks to its set of pre-built rules. -->
+<!-- We've come to appreciate how nice it is to not have to write (and think of) everything Blue Matador already detects.  -->
+<!-- Also, working with the Blue Matador team has been great as they seek feedback and suggestions from customers then make their product better. -->
+
+--- 
+
+# Prometheus
+
+- Metrics:
+  - hosts (nodes)
+  - kubernetes
+  - application (our code)
+  - services (exporters available for redis, rabbitmq, mongo and many more)
+- Alerting (Alertmanager)
+
+![bg right width:100%](kubernetes_prom_diagram2.png)
+
+<!-- By having a single location to go for querying performance data we've been able to simplify our tooling and focus efforts on improving the quality (not just quantity) of what we measure. -->
+<!-- All of our metrics in one place means faster root cause analysis and simpler access for our alert tools. -->
+
+--- 
+
+# Slack
+- Not just for collaboration
+- Extensible framework for bots and webhooks
+- Receives alert messages
+- `bot1`: fetches and graphs prometheus data
+- `bot2`: listens for alerts and asks `bot1` to generate pertinent charts
+
+![bg right width:100%](Slack_RGB.png)
 
 <!-- We have a series of chat bots that monitor alerts and will retrieve and display additional, pertinent information surrounding our alerts. These are most frequently in the form of time-series charts that show various aspects of our platform in the few hours leading up to the alert. -->
 
 ---
 
-# Logs and Performance Stats
+# Visualization & Logs
 - Grafana
 - ELK Stack (host and pod logs)
-- kubectl
+- Prometheus (graph page)
 
 ![bg vertical right contain](grafana.png)
 ![bg right contain](elk-stack-elkb-diagram.svg)
 
 <!-- When alerts aren't enough, we turn to looking at logs and various metrics we graph in Grafana. -->
+<!-- Delicate balance between too much and logging what is useful. -->
+<!-- Zero-based charts when possible, make sure you (and others) understand what the charts convey. -->
+<!-- Backup your grafana dashboards (json export, git... whatever works)-->
+<!-- When running grafana/prometheus within kubernetes (beside in-house web application), ensure your ingress rules don't allow public access. -->
 
 ---
 
 # Utilities: kubectl
 
-The Swiss Army Knife of all kube tools.
+The Swiss Army Knife of all Kubernetes tools.
 - `kubectl describe deployment <name>` # note the events part of the output
 - `kubectl describe service <name>` # verify port(s) AND endpoints
 - `kubectl get pods` # look for restarts, status != Running
@@ -446,19 +483,26 @@ The Swiss Army Knife of all kube tools.
 
 # Utilities: stern
 
-Real-time tailing of kubernetes pods... yes, multiple!
-- `stern -n <namespace> <part_of_pod_name>`
-- `stern -n ingress ingress` # HTTP ingress and which svc/pod it routed to
+Real-time tailing of Kubernetes pods... yes, multiple!
+- Written in Go with pre-compiled releases available on GitHub
+- Leverages ~/.kube/config (or override with --kubeconfig)
+- Some useful flags:
+  - -n <namespace>
+  - -e <string_to_exclude_from_output>
+  - -c <pod_container_name_to_tail>
+  - -l <some_pod_label>=<label_value>
+- Example:
+  - `stern -n kube-sytem kube-proxy --tail 1`
 
-<!-- Stern allows us to see logs across all pods of a deployment, or just a single one... in real time. Read the documentation online because it has a ton of features that you'll find interesting. -->
+<!-- Stern allows us to see logs across all pods of a deployment, or just a single one... in nearly real time. Read the documentation online because it has a ton of features that you'll find interesting. -->
 
 ---
 
 # Utilities: journalctl
 
 Use when necessary or as a last resort... these logs can be very verbose!
-- `journalctl -u kubelet.service` # on kube node
-- `journalctl -u docker.service` # on kube node
+- `journalctl -u kubelet.service`
+- `journalctl -u docker.service`
 - `dmesg`
 
 <!-- Here'll you'll want to look for things like errors/warnings around resource constraints (cannot fork a process) or ther major errors.  Another thing to keep an eye on are dmesg logs about netfilter, or "neighbor".  Kube uses iptables VERY heavily and sometimes kube nodes will need tweaks to systemctl values to increase its ability to track connections within the cluster.  Neighbor errors could mean that you need to increase your arp cache size. -->
