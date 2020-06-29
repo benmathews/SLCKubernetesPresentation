@@ -19,11 +19,18 @@ https://bit.ly/3aNIiZq
 
 ![bg right](painhigh.jpg)
 
+<!-- We are going to talk about Automatic Deployments
+That is what everyone wants right?
+-->
+
 ---
 
 # **Relieve Pain and Suffering**
 
 ![bg left](painlow.jpg)
+
+<!-- We want them because they relieve our pain and suffering
+-->
 
 ---
 
@@ -38,6 +45,10 @@ https://bit.ly/3aNIiZq
 
 ![bg right contain](logos.png)
 
+<!-- Specifically we are going to talk about Vivint's deployment migration with
+Kubernetes, Helm, Helmfile, and Codefresh.
+-->
+
 ---
 
 # Ben Mathews
@@ -45,7 +56,7 @@ https://bit.ly/3aNIiZq
 ben@mathews2000.com
 ben.mathews@vivint.com
 
-I play with the latest CNCF toys.
+A software engineer that loves to play with the latest CNCF toys.
 
 ---
 
@@ -60,7 +71,7 @@ All things automation, with a smattering of Ops-related development and a health
 
 # Who is Vivint (Business)
 
-- We are public now! VVNT
+- A publicly traded company (VVNT)
 - A leading smart home company in North America
 - An integrated smart home system w/ security monitoring
 - More than 1.5 million customers
@@ -92,10 +103,12 @@ All things automation, with a smattering of Ops-related development and a health
 - Pain
 
 <!-- 
-* Software was installed on 40 VMs. 
+Going back a couple years to 2017, 
+* Our software was installed on 40 VMs. 
 * We had a salt configuration for them but used it badly.
 * Deployment was a completely manual process. 
-* It consisted of draining nodes, manually moving traffic around in our F5, we often did hot patching
+* We deployed weekly and rightly thought that was a major improvement from the former every month or so deployment.
+* Deployment consisted of draining nodes, manually moving traffic around in our F5, we often did hot patching
 * In the pets vs cattle analogy we had a lot of poorly behaved pets. 
 * Even when things went well we tolerated minor service disruptions to do a deploy.
 * We were so unconfident that we could deploy that any developer who had code in the release was REQUIRED to be sitting in the area next to the ops guys during the release period.
@@ -120,7 +133,7 @@ All things automation, with a smattering of Ops-related development and a health
   * broken network drivers
   * obscure configuration issues
 * to break all the hard coded paths and other assumptions
-* to harden our code
+* to harden our code to run in a cloud environment
  -->
 
 ---
@@ -135,6 +148,12 @@ All things automation, with a smattering of Ops-related development and a health
 - Restart failed processes
 - Resource caps
 - All the great K8S stuff
+
+<!-- 
+
+By Jan 2018 we had migrated our first production workloads to Kubernetes and finished that migration by early 2019.
+
+-->
 
 ---
 
@@ -159,6 +178,10 @@ All things automation, with a smattering of Ops-related development and a health
 - Wanted multiple dev and QA environments
   - Impossible w/ handcrafted YAML
 
+<!-- As we gained confidence in production we wanted to replicate all the advantages kubernetes gave us to beta and dev environments.
+We knew that with the challenges of maintaining one environment's worth of hand crafted yaml, it would be impossible to scale this effort to multiple environments.
+-->
+
 ---
 
 # Something better
@@ -168,22 +191,28 @@ All things automation, with a smattering of Ops-related development and a health
 
 ![bg brightness:2.5](sunrise.jpg)
 
-<!-- 
-* At the time there was at least three options that appeared to meet our needs
-* Fortunately we picked the winner
- -->
-
 ---
 
 # Helm
 
 - Golang template
-- Need to understand Kubernetes and a bit of programming
 - Well supported by the community
-- Solved all of our problems
-  - Though it created some more
+- Solved all of our current problems
 
 ![bg right:45%](helmhomepage.png)
+
+<!-- 
+* At the time there was at least three options that appeared to meet our needs
+* Fortunately we picked the industry winner
+
+# Helm
+
+- Golang template
+- Well supported by the community
+- Solved all of our current problems
+
+Helm did created additional problems we had to work through but was and continues to be a big part of our deployment solution.
+ -->
 
 ---
 
@@ -207,13 +236,20 @@ All things automation, with a smattering of Ops-related development and a health
 - Faster - half hour
 - Deployments more reliable
 
+<!-- 
+* Over the the course of 2018 and 2019 we wrote charts that were initially used in our dev environments.
+* Using these charts, we created a Platform As A Service that any developer or tester could create a replica of production with any branch of code in minutes.
+* By late 2019 we finished converting everything in production to deploy with Helm charts
+
+* The helm charts deploys were great
+- Faster - half hour
+- Deployments more reliable
+
+ -->
+
 ---
 
 # Helm Install
-
-## Late 2019
-
-Finished converting everything to deploy with Helm charts
 
 ## But
 
@@ -233,9 +269,8 @@ Finished converting everything to deploy with Helm charts
 
 ## But
 
-- Manual workflow
-  - Editing wiki pages
-  - Slack messages
+- Manual workflow means
+  - Communication via wiki pages and Slack
   - Miscomunication and mistakes
   - Outages
 - Still too slow
@@ -255,6 +290,14 @@ Finished converting everything to deploy with Helm charts
   - Okta, Bitbucket Server integration
   - GitOps style
   - Ease of use
+
+<!-- At that point we needed some automation.  
+
+SLIDE
+
+And of those 40 products there were only 3 that met our criteria. 
+
+-->
 
 ---
 
@@ -288,10 +331,14 @@ Finished converting everything to deploy with Helm charts
 
 ![bg right:45%](helmfilepage.png)
 
-<!-- Dustin Van Buskirk suggested Helmfile
-I wrote a script to pull in our existing values files and had it working within days. 
+<!-- As we were working with Codefresh, they suggested Helmfile to meet our GitOps requirement.
+It encapsulates all those commands from our wiki page into an easy to read yaml configuration.
+
+SLIDE
+
+I wrote a script to pull in our existing configuration and had it working within days. 
 The hardest part was training our QA staff that drive our release process.
-IMO If you are using Helm, you should be using Helmfile
+IMO If you are using Helm, you should also be using Helmfile
  -->
 
 ---
@@ -374,6 +421,56 @@ Anyone that has worked with Kubernetes and Helm knows that just running some com
 <!-- The fact that most of our deployment problems are related to Helm is real evidence if the progress we've made over the past several years. -->
 
 <!-- Finally, these problems with Helm charts are totally fixable and preventable.  It won't be long and we'll have these types of issues nearly non-existent. -->
+
+---
+
+# Open Policy Agent
+
+OPA is "an open source, general-purpose policy engine that unifies policy enforcement across the stack. OPA provides a high-level declarative language that let’s you specify policy as code and simple APIs to offload policy decision-making from your software. You can use OPA to enforce policies in microservices, Kubernetes, CI/CD pipelines, API gateways, and more."
+
+![bg right](opa.png)
+
+<!-- 
+As time went along, we noticed that there some recurring problems that would bite us during deployments. 
+But they weren't really deployment issues. They could and should have been caught earlier if anyone was paying attention.
+
+Some of the first things we ran into were
+* specifying images from our dev docker repo which isn't accessible in production
+* using deprecated kubernetes apis
+
+Asking humans to be perfect in code review is hard.
+We decided to have a computer do our work for us.
+
+There are linting tools that catch some general problems
+* running as root
+* using the default namespace
+* setting resource requirements
+
+We decided they were 
+* too raw
+* didn't let us turn off requirements we disagreed with or weren't ready for
+* didn't let us add new business specific rules
+
+Which led us to Open Policy Agent.
+Very flexible and powerful.
+We are just scratching the surface of it's potential so don't think of these examples as in any way showing it's limits.
+-->
+
+---
+
+# Checks at chart package
+
+- Deprecated API
+- Liveness Probe
+- Prometheus scrape annotation
+
+# Checks w/ production configuration applied
+
+- Images tagged latest
+- Images from our dev docker registry
+- CPU request not set
+- HPA minimum < 3
+- Using dev passwords in production
 
 ---
 

@@ -1,0 +1,13 @@
+@startuml
+
+(*) --> "Commit to helmfile repo\n(release branch)"
+--> "Bitbucket webhook triggers CF"
+--> "Helmfile apply to beta"
+--> "QA approval step"
+--> "Helmfile diff"
+--> "Ops approval step"
+--> "Helmfile apply to prod"
+--> "Helmfile test"
+--> (*)
+
+@enduml
