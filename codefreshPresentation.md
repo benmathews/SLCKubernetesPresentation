@@ -271,7 +271,7 @@ Helm did created additional problems we had to work through but was and continue
 
 - Manual workflow means
   - Communication via wiki pages and Slack
-  - Miscomunication and mistakes
+  - Miscommunication and mistakes
   - Outages
 - Still too slow
 
@@ -492,7 +492,7 @@ Anyone that has worked with Kubernetes and Helm knows that just running some com
 # Post Deployment: Automated
 
 - Helm
-  - part of our deployment pipeline runs a `helm test` to make sure the post-deploy kubernetes state is what we wanted
+  - part of our deployment pipeline runs a `helm test` to make sure the post-deploy Kubernetes state is what we wanted
 - Internal tooling (automated tests)
 - Monitoring and alerting
 
@@ -539,10 +539,10 @@ Reliable monitoring with an excellent set of pre-built rules (here are a few):
 
 - Metrics:
   - hosts (nodes)
-  - kubernetes
+  - Kubernetes
   - application (our code)
-  - services (exporters available for redis, rabbitmq, mongo and many more)
-- Alerting (Alertmanager)
+  - services (exporters available for Redis, RabbitMQ, MongoDB and many more)
+- Alerting (AlertManager)
 
 ![bg right width:100%](kubernetes_prom_diagram2.png)
 
@@ -555,7 +555,7 @@ Reliable monitoring with an excellent set of pre-built rules (here are a few):
 - Not just for collaboration
 - Extensible framework for bots and webhooks
 - Receives alert messages
-- `bot1`: fetches and graphs prometheus data
+- `bot1`: fetches and graphs Prometheus data
 - `bot2`: listens for alerts and asks `bot1` to generate pertinent charts
 
 ![bg right width:100%](Slack_RGB.png)
