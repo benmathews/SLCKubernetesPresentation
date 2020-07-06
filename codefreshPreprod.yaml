@@ -1,0 +1,56 @@
+version: "1.0"
+steps:
+  CloneHelmfile:
+    title: "Cloning main repository..."
+    type: git-clone
+    repo: "..."
+    revision: '${{CF_REVISION}}'
+    git: bitbucket-server
+    
+  DeployToBeta:
+    type: freestyle
+    description: Deploy to beta
+    title: Deploy to beta
+    working_directory: "${{CloneHelmfile}}"
+    fail_fast: true
+    arguments:
+      image: quay.io/roboll/helmfile:helm3-v0.115.0
+      commands:        
+        - ./ci-helm.sh list
+        - ./ci-helm.sh apply --context 3 --concurrency 5
+        - ./ci-helm.sh test --concurrency 5
+    environment:
+      - HELMFILE_HELM3="1"
+      - NAMESPACE=beta
+      - ENVIRONMENT=beta
+      - KUBE_CONTEXT=tp
+      
+  sendSlack:
+    type: slack-message-sender
+    arguments:
+      WEBHOOK_URL: "https://hooks.slack.com/services/...."
+      MESSAGE: "The beta namespace was updated to branch ${{CF_BRANCH}}. See the <https://.../compare/diff?sourceBranch=${{CF_REVISION}}&targetRepoId=...|changes> from current production"
+  
+  QA_Approval:
+    type: pending-approval
+    title: Wait for QA approval
+  
+  codefresh_east_run:
+    title: Run east production pipeline
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: default/prod-se
+      DETACH: true
+      VARIABLE:
+        - CF_REVISION=${{CF_REVISION}}
+        - CF_BRANCH=${{CF_BRANCH}}
+  
+  codefresh_west_run:
+      title: Run west production pipeline
+      type: codefresh-run
+      arguments:
+        PIPELINE_ID: default/prod-sw
+        DETACH: true
+        VARIABLE:
+          - CF_REVISION=${{CF_REVISION}}
+          - CF_BRANCH=${{CF_BRANCH}}

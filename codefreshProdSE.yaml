@@ -1,0 +1,70 @@
+version: '1.0'
+steps:
+  CloneHelmfile:
+    title: "Cloning helmfile repository..."
+    type: git-clone
+    repo: "https://source.vivint.com/scm/pl/helmfile.git"
+    revision: '${{CF_REVISION}}'
+    git: bitbucket-server
+
+  DiffProduction:
+    type: freestyle
+    description: Diff to production
+    title: Diff to production
+    working_directory: "${{CloneHelmfile}}"
+    fail_fast: true
+    environment:
+      - NAMESPACE=nebo
+      - ENVIRONMENT=production
+      - KUBE_CONTEXT=se
+    arguments:
+      image: quay.io/roboll/helmfile:v0.115.0
+      commands:        
+        - ./ci-helm.sh diff --context 3 --concurrency 5              
+      
+  Approval:
+    type: pending-approval
+    title: Wait for Ops approval
+    
+  sendStartProductionDeploySlack:
+    type: slack-message-sender
+    arguments:
+      WEBHOOK_URL: 'https://hooks.slack.com/services/...'
+      MESSAGE: ':greenlight: The platform deploy to the *east* data center is starting. See the <https://.../compare/diff?sourceBranch=${{CF_REVISION}}&targetRepoId=...|changes> from current production for branch ${{CF_BRANCH}}'
+      
+  DeploySavisEast:
+    type: freestyle
+    description: Deploy to production
+    title: Deploy to production
+    working_directory: "${{CloneHelmfile}}"
+    fail_fast: true
+    environment:
+      - NAMESPACE=...
+      - ENVIRONMENT=production
+      - KUBE_CONTEXT=...
+    arguments:
+      image: quay.io/roboll/helmfile:v0.115.0
+      commands:        
+        - ./ci-helm.sh apply --context 3 --concurrency 5
+      
+  SendDoneProductionDeploySlack:
+    type: slack-message-sender
+    arguments:
+      WEBHOOK_URL: 'https://hooks.slack.com/services/...'
+      MESSAGE: ':checkered_flag: The platform deploy to the *east* data center is finished. See the See the <https://.../compare/diff?sourceBranch=${{CF_REVISION}}&targetRepoId=...|changes> from current production for branch ${{CF_BRANCH}}'
+      
+  TestSavisEast:
+    type: freestyle
+    description: Test savis east deployments with helmfile test
+    title: Test savis east deployments
+    working_directory: "${{CloneHelmfile}}"
+    fail_fast: true
+    environment:
+      - NAMESPACE=...
+      - ENVIRONMENT=production
+      - KUBE_CONTEXT=...
+    arguments:
+      image: quay.io/roboll/helmfile:v0.115.0
+      commands:        
+        - ./ci-helm.sh test --concurrency 5          
+      

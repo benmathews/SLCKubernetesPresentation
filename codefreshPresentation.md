@@ -98,7 +98,7 @@ All things automation, with a smattering of Ops-related development and a health
 ## 2017
 
 - Large installation of VMs
-- Deployment was a 3-4 hour, completely manual process
+- Deployment was a four hour, completely manual process
 - Problems
 - Pain
 
@@ -352,6 +352,10 @@ IMO If you are using Helm, you should also be using Helmfile
 
 ![bg right contain](codefreshflow.png)
 
+<!-- 
+Lets take a quick detour and see how this looks in the codefresh pipeline syntax
+-->
+
 ---
 
 # Fully Automatic Install
@@ -367,37 +371,6 @@ Codefresh, Helm, and Helmfile have been working well.
 - Slack notifications
 
 ![bg right:35%](deploymentSlackNotification.png)
-
----
-
-# Fully Automatic Install
-
-## But
-
-- Still not fast enough
-- Not enough visibility if deployment succeded
-
----
-
-# Mid 2020
-
-## Speed
-
-## Reliability
-
-Partial rollout of:
-- Liveness Probes
-- Readiness Probes
-- Helm Tests
-
-
-<!-- 
-As of now, we are really happy with how our deployments work though we continue to work to make them better. 
-
-In a continual quest to make deploys faster, we have some efforts there
-
-We are working on reliability in a couple of areas. Liveness and readiness probes detect when a pod isn't working or doesn't have available dependencies and takes appropriate action. Helm tests are post deploy tests that verify the correctness of the deployment. We have implimented these in some of our deployments and are working to get them everywhere. 
--->
 
 ---
 
@@ -451,9 +424,61 @@ We are using a cannon to kill flies so don't think of these examples as in any w
 - HPA minimum < 3
 - Using dev passwords in production
 
-<!-- 
-READ SLIDE
+---
 
+# Mid 2020 progress report - Old
+
+- VM based
+- Hand installation and modification of rpms/configuration
+- Four hour deploys
+- Accepted outages as part of deployment
+
+<!-- 
+I'm really excited about the changes we have made. In 2.5 years we went from and environment that ...
+SLIDE
+-->
+
+---
+
+# Mid 2020 progress report - Now
+
+- Kubernetes based
+- Deployment is mostly tested in advance in non prod environments
+- Fully automatic deploy
+- Five minute deploy
+- No outages (almost ever)
+
+---
+
+# The future
+
+- Still not fast enough
+- Not enough visibility if deployment succeded
+
+## Reliability
+
+Partial rollout of:
+- Liveness Probes
+- Readiness Probes
+- Helm Tests
+
+
+<!-- 
+So what are we doing next?
+We are really happy with how well we can push out kubernetes objects through Helm, Helmfile, and Codefresh. That is reliable and fast. 
+
+There is some work around the edges to make deployments faster. But for the most part they are fast enough.
+
+Where we are lacking still is visibility if the kubernetes objects we pushed out are working as we expected them to. 
+We are addressing this in a couple of ways.
+
+Kubernetes deployments have Liveness and readiness probes that detect when a pod isn't working or doesn't have available dependencies and takes appropriate action. 
+Helm tests are post deploy tests that verify the correctness of the deployment. 
+We have implimented these in some of our deployments and are working to get them finished everywhere. 
+Once they are on all deployments, we can be sure that if a helm deployment finishes that it is working. 
+-->
+
+<!-- 
 With this, I want to turn the remainder of the presentation over to Jared. I talked about the ideal world pre-production where everything works. He is going to talk about the real world of operations during and after deployment.
 -->
 
