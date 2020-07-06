@@ -381,6 +381,8 @@ Codefresh, Helm, and Helmfile have been working well.
 
 # Mid 2020
 
+## Speed
+
 ## Reliability
 
 Partial rollout of:
@@ -388,9 +390,72 @@ Partial rollout of:
 - Readiness Probes
 - Helm Tests
 
-## Speed
 
-More intelligence around deployment to make them faster
+<!-- 
+As of now, we are really happy with how our deployments work though we continue to work to make them better. 
+
+In a continual quest to make deploys faster, we have some efforts there
+
+We are working on reliability in a couple of areas. Liveness and readiness probes detect when a pod isn't working or doesn't have available dependencies and takes appropriate action. Helm tests are post deploy tests that verify the correctness of the deployment. We have implimented these in some of our deployments and are working to get them everywhere. 
+-->
+
+---
+
+# Open Policy Agent
+
+OPA is "an open source, general-purpose policy engine that unifies policy enforcement across the stack. OPA provides a high-level declarative language that let’s you specify policy as code and simple APIs to offload policy decision-making from your software. You can use OPA to enforce policies in microservices, Kubernetes, CI/CD pipelines, API gateways, and more."
+
+![bg right](opa.png)
+
+<!-- 
+The last thing I want to talk about on the development side is policies. 
+
+As time went along, we noticed that there some recurring problems that would bite us during deployments. 
+But they weren't really deployment issues. They could and should have been caught earlier if anyone was paying attention.
+
+Some of the first things we ran into were
+* specifying images from our dev docker repo which isn't accessible in production
+* using deprecated kubernetes apis
+
+Asking humans to be perfect in code review is hard and wasteful.
+We decided to have a computer do our work for us.
+
+There are linting tools that catch some general problems
+* running as root
+* using the default namespace
+* setting resource requirements
+
+We decided they were 
+* too raw
+* didn't let us turn off requirements we disagreed with or weren't ready for
+* didn't let us add new business specific rules
+
+Which led us to Open Policy Agent.
+Very flexible and powerful. 
+We are using a cannon to kill flies so don't think of these examples as in any way showing it's limits.
+-->
+
+---
+
+# Checks at chart package
+
+- Deprecated API
+- Liveness Probe
+- Prometheus scrape annotation
+
+# Checks w/ production configuration applied
+
+- Images tagged latest
+- Images from our dev docker registry
+- CPU request not set
+- HPA minimum < 3
+- Using dev passwords in production
+
+<!-- 
+READ SLIDE
+
+With this, I want to turn the remainder of the presentation over to Jared. I talked about the ideal world pre-production where everything works. He is going to talk about the real world of operations during and after deployment.
+-->
 
 ---
 
@@ -421,56 +486,6 @@ Anyone that has worked with Kubernetes and Helm knows that just running some com
 <!-- The fact that most of our deployment problems are related to Helm is real evidence if the progress we've made over the past several years. -->
 
 <!-- Finally, these problems with Helm charts are totally fixable and preventable.  It won't be long and we'll have these types of issues nearly non-existent. -->
-
----
-
-# Open Policy Agent
-
-OPA is "an open source, general-purpose policy engine that unifies policy enforcement across the stack. OPA provides a high-level declarative language that let’s you specify policy as code and simple APIs to offload policy decision-making from your software. You can use OPA to enforce policies in microservices, Kubernetes, CI/CD pipelines, API gateways, and more."
-
-![bg right](opa.png)
-
-<!-- 
-As time went along, we noticed that there some recurring problems that would bite us during deployments. 
-But they weren't really deployment issues. They could and should have been caught earlier if anyone was paying attention.
-
-Some of the first things we ran into were
-* specifying images from our dev docker repo which isn't accessible in production
-* using deprecated kubernetes apis
-
-Asking humans to be perfect in code review is hard.
-We decided to have a computer do our work for us.
-
-There are linting tools that catch some general problems
-* running as root
-* using the default namespace
-* setting resource requirements
-
-We decided they were 
-* too raw
-* didn't let us turn off requirements we disagreed with or weren't ready for
-* didn't let us add new business specific rules
-
-Which led us to Open Policy Agent.
-Very flexible and powerful.
-We are just scratching the surface of it's potential so don't think of these examples as in any way showing it's limits.
--->
-
----
-
-# Checks at chart package
-
-- Deprecated API
-- Liveness Probe
-- Prometheus scrape annotation
-
-# Checks w/ production configuration applied
-
-- Images tagged latest
-- Images from our dev docker registry
-- CPU request not set
-- HPA minimum < 3
-- Using dev passwords in production
 
 ---
 
