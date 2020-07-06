@@ -305,7 +305,7 @@ And of those 40 products there were only 3 that met our criteria.
 
 - ArgoCD
 - FluxCD
-- CodeFresh
+- Codefresh
 
 ![bg right](codefreshlogo.jpg)
 
@@ -314,7 +314,7 @@ And of those 40 products there were only 3 that met our criteria.
 # The winners
 
 - Argo Flux
-- CodeFresh
+- Codefresh
 
 ![bg right](codefreshlogo.jpg)
 
