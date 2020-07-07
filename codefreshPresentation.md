@@ -684,6 +684,31 @@ Use when necessary or as a last resort... these logs can be very verbose!
 
 ---
 
+# Recap: Then
+- Poorly tooled, manual deployments
+- Took 4 hours
+- Not repeatable
+- Large chance of user error
+- Most "hot fixes" were manual file edits on hosts (just took too long to re-deploy everything)
+- Yes, it was a monolith!
+- Complete manual verification that our code was running... very little in terms of automated alerting
+- Very little confidence that a deploy would go off without a hitch
+
+---
+
+# Recap: Now
+- Codefresh
+- Helmfile
+- 100% Kubernetes
+- (nearly) Fully automated
+- (almost) zero chance for user error
+- Able to deploy individual pieces instead of the whole thing
+- Alerts come in within just a couple of minutes if things are bad
+- Faster turnaround time for releasing hot fixes
+- Signifantly less down-time due to the better deployment process and alerting!!!
+
+---
+
 https://github.com/benmathews/SLCKubernetesPresentation
 
 https://bit.ly/3aNIiZq
