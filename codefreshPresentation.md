@@ -546,13 +546,51 @@ The Kubernetes ecosystem is a complex and intertwined mix of a LOT of different 
 
 # Blue Matador
 
-Reliable monitoring with an excellent set of pre-built rules (here are a few):
-- crashing pods
-- deployments with too few pods
-- pods getting OOM-killed
-- nodes offline
+Reliable monitoring:
+- Understands AWS and K8S native objects
+- Distributed (per-node agent)
+- Deployable via standalone or K8S daemonset
+- Notification service integrations
+- Useful web interface
 
 ![bg right height:100%](BlueMatador-Logo-Stacked.jpg)
+
+---
+
+# Blue Matador: Dashboard
+
+In addition to alerting, Blue Matador also provides a rich web interface:
+- Useful widgets
+- Refreshes near real-time
+- Just about everything you see clickable
+
+![bg right width:100%](Blue-Matador-Dashboard.png)
+
+---
+
+# Blue Matador: Events
+
+Events are central to Blue Matador:
+- Viewed individually
+- Searched for
+- Shown on a timeline
+- Detailed
+
+
+![bg right width:100%](Blue-Matador-K8-Events.png)
+
+
+---
+
+# Blue Matador: K8S
+
+Kubernetes is fully integrated:
+- crashing pods
+- deployments with too few pods
+- OOM events
+- node problems (resources, ready status)
+
+![bg right width:100%](Blue-Matador-K8s-Objects.png)
 
 <!-- Blue Matador has been an extremely reliable and (thankfully) hands-off monitoring solution thanks to its set of pre-built rules. -->
 <!-- We've come to appreciate how nice it is to not have to write (and think of) everything Blue Matador already detects.  -->
