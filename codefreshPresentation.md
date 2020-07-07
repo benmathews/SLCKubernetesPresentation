@@ -426,30 +426,6 @@ We are using a cannon to kill flies so don't think of these examples as in any w
 
 ---
 
-# Mid 2020 progress report - Old
-
-- VM based
-- Hand installation and modification of rpms/configuration
-- Four hour deploys
-- Accepted outages as part of deployment
-
-<!-- 
-I'm really excited about the changes we have made. In 2.5 years we went from and environment that ...
-SLIDE
--->
-
----
-
-# Mid 2020 progress report - Now
-
-- Kubernetes based
-- Deployment is mostly tested in advance in non prod environments
-- Fully automatic deploy
-- Five minute deploy
-- No outages (almost ever)
-
----
-
 # The future
 
 - Still not fast enough
@@ -464,6 +440,8 @@ Partial rollout of:
 
 
 <!-- 
+I'm really excited about the changes we have made. In 2.5 years we went from barely hanging together to pretty good. 
+
 So what are we doing next?
 We are really happy with how well we can push out kubernetes objects through Helm, Helmfile, and Codefresh. That is reliable and fast. 
 
