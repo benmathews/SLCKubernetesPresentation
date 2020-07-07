@@ -675,7 +675,7 @@ Use when necessary or as a last resort... these logs can be very verbose!
 ---
 
 # Recap: Now
-- Codefresh
+- Codefresh & Blue Matador
 - Helmfile
 - 100% Kubernetes
 - (nearly) Fully automated
